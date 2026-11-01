@@ -55,6 +55,7 @@ export class UsersService {
         return {
             veltrixId: user.veltrixId,
             profileCompleted: user.profileCompleted,
+            id: user._id
         };
     }
 
