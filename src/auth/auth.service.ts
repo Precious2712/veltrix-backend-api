@@ -1,10 +1,12 @@
-
 import {
     Injectable,
     UnauthorizedException,
 } from '@nestjs/common';
 
-import { SignInService } from '@nestjs/authentication';
+import {
+    SignInService,
+    TokenService,
+} from '@nestjs/authentication';
 
 import { UsersService } from '../users/users.service.js';
 import { SignInDto } from './dto/auth.dto.js';
@@ -14,6 +16,7 @@ export class AuthService {
     constructor(
         private readonly usersService: UsersService,
         private readonly signInService: SignInService,
+        private readonly tokenService: TokenService,
     ) { }
 
     async signIn(body: SignInDto) {
@@ -28,20 +31,14 @@ export class AuthService {
             );
         }
 
-        const { session } = await this.signInService.signIn(
-            user.id,
-            { method: 'password' },
-        );
-
-        return {
-            veltrixId: user.veltrixId,
-            profileCompleted: user.profileCompleted,
-            mfaRequired: session.mfa === 'pending',
-            identifierId: user.id
-        };
+        return this.tokenService.issue(user.id, {
+            method: 'password',
+            claims: {
+                amr: ['pwd'],
+            },
+        });
     }
 
-    
     async signOut() {
         const signedOut = await this.signInService.signOut();
 
@@ -52,5 +49,9 @@ export class AuthService {
         return {
             message: 'Successfully signed out',
         };
+    }
+
+    async refreshToken(refreshToken: string) {
+        return this.tokenService.refresh(refreshToken);
     }
 }

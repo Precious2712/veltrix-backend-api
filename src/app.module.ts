@@ -11,10 +11,11 @@ import { AuthModule } from './auth/auth.module.js';
 import { VtuagentModule } from './vtuagent/vtuagent.module.js';
 import { WalletModule } from './wallet/wallet.module.js';
 import { ProfileModule } from './profile/profile.module.js';
+import { JwtAuth } from './auth/jwt-auth.provider.js';
+import { AdminModule } from './admin/admin.module.js';
 
 @Module({
   imports: [
-    
     ConfigModule.forRoot({
       isGlobal: true,
     }),
@@ -27,11 +28,22 @@ import { ProfileModule } from './profile/profile.module.js';
       }),
     }),
 
-    AuthenticationModule.forRoot({
-      session: {
-        absoluteTtl: '14d',
-        idleTtl: '3d',
-      },
+    AuthenticationModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        session: {
+          absoluteTtl: '14d',
+          idleTtl: '3d',
+        },
+
+        accessToken: {
+          key: configService.getOrThrow<string>('JWT_SECRET'),
+          issuer: 'https://api.veltrix.com',
+          audience: 'mobile-app',
+          ttl: '15m',
+        },
+      }),
     }),
 
     UsersModule,
@@ -39,11 +51,15 @@ import { ProfileModule } from './profile/profile.module.js';
     VtuagentModule,
     WalletModule,
     ProfileModule,
+    AdminModule,
   ],
 
   controllers: [AppController],
-  providers: [AppService],
+  
+  providers: [
+    AppService,
+    JwtAuth
+  ],
 })
 
-
-export class AppModule { };
+export class AppModule { }
