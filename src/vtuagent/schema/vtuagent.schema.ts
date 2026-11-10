@@ -1,4 +1,7 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
+import { HydratedDocument } from 'mongoose';
+
+export type TopUpDocument = HydratedDocument<TopUp>;
 
 export enum Network {
     MTN = 'MTN',

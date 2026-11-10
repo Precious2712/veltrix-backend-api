@@ -2,7 +2,7 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 
-export type UserDocument = HydratedDocument<Profile>;
+export type ProfileDocument = HydratedDocument<Profile>;
 
 @Schema({ timestamps: true })
 export class Profile {
@@ -38,8 +38,8 @@ export class Profile {
     })
     address: string;
 
-    @Prop({ default: false })
-    profileCompleted: boolean;
+    // @Prop({ default: false })
+    // profileCompleted: boolean;
 }
 
 export const ProfileSchema = SchemaFactory.createForClass(Profile);
