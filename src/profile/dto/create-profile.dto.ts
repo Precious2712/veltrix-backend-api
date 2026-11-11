@@ -6,11 +6,16 @@ import {
     Matches,
     MinLength,
     MaxLength,
+    IsMongoId
 } from 'class-validator';
 
 import { Transform } from 'class-transformer';
 
 export class CreateProfileDto {
+
+    @IsMongoId()
+    @IsNotEmpty()
+    userId: string;
 
     @IsString()
     @IsNotEmpty()

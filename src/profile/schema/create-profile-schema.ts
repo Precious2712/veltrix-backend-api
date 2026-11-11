@@ -1,6 +1,6 @@
 
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 
 export type ProfileDocument = HydratedDocument<Profile>;
 
@@ -10,8 +10,13 @@ export class Profile {
     @Prop({ required: true, unique: true })
     veltrixId: string;
 
-    @Prop({ required: true })
-    passwordHash: string;
+    @Prop({
+        type: Types.ObjectId,
+        ref: 'User',
+        required: true,
+        unique: true,
+    })
+    userId: Types.ObjectId;
 
     @Prop({ required: true, trim: true })
     firstname: string;
@@ -37,9 +42,6 @@ export class Profile {
         match: /^\d+\s+[a-zA-Z][a-zA-Z\s.,'-]*,\s*[a-zA-Z][a-zA-Z\s'-]*,\s*[a-zA-Z][a-zA-Z\s'-]*$/,
     })
     address: string;
-
-    // @Prop({ default: false })
-    // profileCompleted: boolean;
 }
 
 export const ProfileSchema = SchemaFactory.createForClass(Profile);
