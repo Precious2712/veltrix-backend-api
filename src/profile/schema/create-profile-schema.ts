@@ -7,7 +7,7 @@ export type ProfileDocument = HydratedDocument<Profile>;
 @Schema({ timestamps: true })
 export class Profile {
 
-    @Prop({ required: true, unique: true })
+    @Prop({ type: String, required: true, unique: true })
     veltrixId: string;
 
     @Prop({
@@ -18,25 +18,30 @@ export class Profile {
     })
     userId: Types.ObjectId;
 
-    @Prop({ required: true, trim: true })
+    @Prop({ type: String, required: true, trim: true })
     firstname: string;
 
-    @Prop({ required: true, trim: true })
+    @Prop({ type: String, required: true, trim: true })
     lastname: string;
 
-    @Prop({ trim: true, default: null })
-    middlename: string | null;
+    @Prop({
+        type: String,
+        trim: true,
+        default: null,
+    })
+    middlename?: string | null;
 
-    @Prop({ required: true, trim: true })
+    @Prop({ type: String, required: true, trim: true })
     country: string;
 
-    @Prop({ required: true, trim: true })
+    @Prop({ type: String, required: true, trim: true })
     state: string;
 
-    @Prop({ required: true, trim: true })
+    @Prop({ type: String, required: true, trim: true })
     occupation: string;
 
     @Prop({
+        type: String,
         required: true,
         trim: true,
         match: /^\d+\s+[a-zA-Z][a-zA-Z\s.,'-]*,\s*[a-zA-Z][a-zA-Z\s'-]*,\s*[a-zA-Z][a-zA-Z\s'-]*$/,

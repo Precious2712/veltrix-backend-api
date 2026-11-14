@@ -31,12 +31,16 @@ export class AuthService {
             );
         }
 
-        return this.tokenService.issue(user.id, {
+        const token = await this.tokenService.issue(user.id, {
             method: 'password',
             claims: {
                 amr: ['pwd'],
             },
         });
+
+        console.log('Issued token:', token);
+
+        return token;
     }
 
     async signOut() {
