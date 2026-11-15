@@ -13,6 +13,7 @@ import { WalletModule } from './wallet/wallet.module.js';
 import { ProfileModule } from './profile/profile.module.js';
 import { JwtAuth } from './auth/jwt-auth.provider.js';
 import { AdminModule } from './admin/admin.module.js';
+import { PinModule } from './pin/pin.module.js';
 
 @Module({
   imports: [
@@ -52,6 +53,7 @@ import { AdminModule } from './admin/admin.module.js';
     WalletModule,
     ProfileModule,
     AdminModule,
+    PinModule,
   ],
 
   controllers: [AppController],
