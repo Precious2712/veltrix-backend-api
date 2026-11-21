@@ -42,7 +42,12 @@ import { PinModule } from './pin/pin.module.js';
           key: configService.getOrThrow<string>('JWT_SECRET'),
           issuer: 'https://api.veltrix.com',
           audience: 'mobile-app',
-          ttl: '15m',
+          ttl: '30m',
+        },
+
+        refreshToken: {
+          ttl: '1d',
+          absoluteTtl: '7d',
         },
       }),
     }),
@@ -57,7 +62,7 @@ import { PinModule } from './pin/pin.module.js';
   ],
 
   controllers: [AppController],
-  
+
   providers: [
     AppService,
     JwtAuth

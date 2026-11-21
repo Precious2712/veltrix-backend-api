@@ -6,16 +6,11 @@ import {
     Matches,
     MinLength,
     MaxLength,
-    IsMongoId
 } from 'class-validator';
 
 import { Transform } from 'class-transformer';
 
 export class CreateProfileDto {
-
-    @IsMongoId()
-    @IsNotEmpty()
-    userId: string;
 
     @IsString()
     @IsNotEmpty()
@@ -67,7 +62,7 @@ export class CreateProfileDto {
     @IsString()
     @IsNotEmpty()
     @Matches(
-        /^\d+\s+[a-zA-Z][a-zA-Z\s.'-]*,\s*[a-zA-Z][a-zA-Z\s'-]*$/,
+        /^\d+\s+[a-zA-Z][a-zA-Z\s.,'-]*,\s*[a-zA-Z][a-zA-Z\s'-]*(?:,\s*[a-zA-Z][a-zA-Z\s'-]*){0,2}$/,
         {
             message:
                 'Address must follow this format: House Number, Street Name, State (e.g. 12 Allen Avenue, Ikeja, Lagos)',

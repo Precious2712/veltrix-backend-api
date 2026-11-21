@@ -19,7 +19,7 @@ export class PinController {
         private readonly pinService: PinService,
     ) { }
 
-    @Post('create')
+    @Post('transaction-pin')
     async create(
         @CurrentUser() user: User & { _id: Types.ObjectId },
         @Body() dto: CreatePinDto,

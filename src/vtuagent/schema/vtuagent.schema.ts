@@ -1,5 +1,6 @@
+
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 
 export type TopUpDocument = HydratedDocument<TopUp>;
 
@@ -40,8 +41,12 @@ export class TopUp {
     @Prop({ required: true })
     phone: string;
 
-    @Prop({ required: true })
-    amount: number;
+    @Prop({
+        required: function (this: TopUp) {
+            return this.type === PurchaseType.AIRTIME;
+        },
+    })
+    amount?: number;
 
     @Prop({
         enum: Object.values(DataCategory),
@@ -60,6 +65,14 @@ export class TopUp {
 
     @Prop({ required: true })
     price: number;
+
+    @Prop({
+        type: Types.ObjectId,
+        ref: 'User',
+        required: true,
+        index: true,
+    })
+    userId: Types.ObjectId;
 }
 
 export const TopUpSchema =

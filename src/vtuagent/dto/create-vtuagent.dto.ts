@@ -4,6 +4,7 @@ import {
     IsNumber,
     IsEnum,
     ValidateIf,
+    Matches,
 } from 'class-validator';
 
 import {
@@ -58,4 +59,9 @@ export class CreateVtuAgentDto {
     @IsNotEmpty({ message: 'Price is required' })
     @IsNumber()
     price: number;
+
+    @Matches(/^\d{4}$/, {
+        message: 'Transaction PIN must contain exactly 4 digits',
+    })
+    pin: string;
 }

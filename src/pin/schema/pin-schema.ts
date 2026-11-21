@@ -10,10 +10,9 @@ export class TransactionPin {
 
     @Prop({
         required: true,
-        minlength: 4,
-        maxlength: 4,
+        select: false,
     })
-    pinHash: string;
+    pin: string;
 
     @Prop({
         type: Types.ObjectId,

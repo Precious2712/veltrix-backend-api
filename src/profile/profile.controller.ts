@@ -24,7 +24,8 @@ export class ProfileController {
     ) {
         return this.profileService.userProfile(
             user._id,
-            bioData,
+            user.veltrixId,
+            bioData
         );
     }
 }

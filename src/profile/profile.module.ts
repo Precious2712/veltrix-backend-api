@@ -6,6 +6,8 @@ import { ProfileController } from './profile.controller.js';
 import { ProfileService } from './profile.service.js';
 
 import { Profile, ProfileSchema } from './schema/create-profile-schema.js';
+import { User, UserSchema } from '../users/schema/users-schema.js';
+
 
 @Module({
   imports: [
@@ -13,6 +15,11 @@ import { Profile, ProfileSchema } from './schema/create-profile-schema.js';
       {
         name: Profile.name,
         schema: ProfileSchema,
+      },
+
+      {
+        name: User.name,
+        schema: UserSchema
       },
     ]),
   ],
@@ -22,4 +29,4 @@ import { Profile, ProfileSchema } from './schema/create-profile-schema.js';
   exports: [ProfileService],
 })
 
-export class ProfileModule {}
+export class ProfileModule { }

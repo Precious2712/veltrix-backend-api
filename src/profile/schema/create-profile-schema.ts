@@ -44,7 +44,7 @@ export class Profile {
         type: String,
         required: true,
         trim: true,
-        match: /^\d+\s+[a-zA-Z][a-zA-Z\s.,'-]*,\s*[a-zA-Z][a-zA-Z\s'-]*,\s*[a-zA-Z][a-zA-Z\s'-]*$/,
+        match: /^\d+\s+[a-zA-Z][a-zA-Z\s.,'-]*,\s*[a-zA-Z][a-zA-Z\s'-]*(?:,\s*[a-zA-Z][a-zA-Z\s'-]*){0,2}$/
     })
     address: string;
 }

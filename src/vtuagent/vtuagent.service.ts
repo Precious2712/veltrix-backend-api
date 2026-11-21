@@ -1,22 +1,32 @@
 
-import { Injectable, BadRequestException } from '@nestjs/common';
+import {
+    Injectable,
+    BadRequestException,
+    Inject
+} from '@nestjs/common';
 
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 
 import { TopUp, PurchaseType } from './schema/vtuagent.schema.js';
 import { CreateVtuAgentDto } from './dto/create-vtuagent.dto.js';
 
+import { PinService } from '../pin/pin.service.js';
+
 @Injectable()
 export class VtuagentService {
-
     constructor(
         @InjectModel(TopUp.name)
-        private readonly topUpModel: Model<TopUp>
+        private readonly topUpModel: Model<TopUp>,
+
+        @Inject(PinService)
+        private readonly pinService: PinService,
     ) { }
 
-    async processTopUp(createVtuAgentDto: CreateVtuAgentDto) {
-
+    async processTopUp(
+        createVtuAgentDto: CreateVtuAgentDto,
+        userId: Types.ObjectId,
+    ) {
         const {
             network,
             type,
@@ -24,45 +34,43 @@ export class VtuagentService {
             amount,
             category,
             dataValue,
-            price
+            price,
+            pin,
         } = createVtuAgentDto;
 
+
+        await this.pinService.verify(userId, pin);
+
         switch (type) {
-
             case PurchaseType.AIRTIME: {
-
                 const vendorAirtime = await this.topUpModel.create({
                     network,
                     type,
                     phone,
-                    amount,
-                    price
+                    price,
+                    userId
                 });
-
-                console.log('vendor-airtime', vendorAirtime);
 
                 return {
                     message: 'Airtime purchase recorded successfully',
-                    vendorAirtime
+                    vendorAirtime,
                 };
-
             }
 
-
             case PurchaseType.DATA: {
-
                 const vendorData = await this.topUpModel.create({
                     network,
                     type,
                     phone,
                     category,
                     dataValue,
-                    price
+                    price,
+                    userId
                 });
 
                 return {
                     message: 'Data purchase recorded successfully',
-                    vendorData
+                    vendorData,
                 };
             }
 

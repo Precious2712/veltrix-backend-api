@@ -2,6 +2,7 @@ import {
     Injectable,
     ConflictException,
     InternalServerErrorException,
+    UnauthorizedException,
 } from '@nestjs/common';
 
 import { InjectModel } from '@nestjs/mongoose';
@@ -38,7 +39,7 @@ export class PinService {
 
             const transactionPin = await this.pinModel.create({
                 userId,
-                pinHash,
+                pin: pinHash,
             });
 
             return {
@@ -52,6 +53,25 @@ export class PinService {
 
             throw new InternalServerErrorException(
                 'Unable to create transaction PIN',
+            );
+        }
+    }
+
+
+    async verify(
+        userId: Types.ObjectId,
+        pin: string,
+    ): Promise<void> {
+        const transactionPin = await this.pinModel.findOne({ userId });
+
+        const isValid = await this.passwordHasher.verify(
+            pin,
+            transactionPin?.pin,
+        );
+
+        if (!transactionPin || !isValid) {
+            throw new UnauthorizedException(
+                'Invalid transaction PIN',
             );
         }
     }
