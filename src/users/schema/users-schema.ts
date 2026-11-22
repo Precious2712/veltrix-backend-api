@@ -1,7 +1,14 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 
 export type UserDocument = HydratedDocument<User>;
+
+export type AuthenticatedUser = {
+  _id: Types.ObjectId;
+  veltrixId: string;
+  profileCompleted: boolean;
+};
+
 
 @Schema({ timestamps: true })
 export class User {

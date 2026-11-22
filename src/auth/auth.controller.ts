@@ -28,9 +28,17 @@ export class AuthController {
         return this.authService.signIn(body);
     }
 
+    // @Post('sign-out')
+    // @HttpCode(200)
+    // async signOut() {
+    //     return this.authService.signOut();
+    // }
+
     @Post('sign-out')
     @HttpCode(200)
-    async signOut() {
+    async signOut(@CurrentUser() user: User) {
+        console.log('Sign-out user:', user);
+
         return this.authService.signOut();
     }
 

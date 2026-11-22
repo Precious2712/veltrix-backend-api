@@ -42,10 +42,14 @@ export class PinService {
                 pin: pinHash,
             });
 
+            console.log('Creating PIN for user:', userId);
+            console.log('PIN created:', transactionPin._id);
+
             return {
                 message: 'Transaction PIN created successfully',
                 userId: transactionPin.userId,
             };
+
         } catch (error) {
             if (error instanceof ConflictException) {
                 throw error;
@@ -57,22 +61,33 @@ export class PinService {
         }
     }
 
-
     async verify(
         userId: Types.ObjectId,
         pin: string,
     ): Promise<void> {
-        const transactionPin = await this.pinModel.findOne({ userId });
+        const transactionPin = await this.pinModel
+            .findOne({ userId })
+            .select('+pin');
+
+        if (!transactionPin) {
+            throw new UnauthorizedException(
+                'Transaction PIN has not been created',
+            );
+        }
 
         const isValid = await this.passwordHasher.verify(
             pin,
-            transactionPin?.pin,
+            transactionPin.pin,
         );
 
-        if (!transactionPin || !isValid) {
+        console.log('Creating PIN for user:', userId);
+        console.log('PIN created:', transactionPin._id);
+
+        if (!isValid) {
             throw new UnauthorizedException(
                 'Invalid transaction PIN',
             );
         }
     }
+
 }

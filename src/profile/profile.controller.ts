@@ -3,13 +3,17 @@ import {
     Controller,
     Post,
     Body,
+    Get,
+    Query,
 } from '@nestjs/common';
 
 import { ProfileService } from './profile.service.js';
 import { CreateProfileDto } from './dto/create-profile.dto.js';
 
-import { CurrentUser } from '@nestjs/authentication';
-import type { UserDocument } from '../users/schema/users-schema.js';
+import { CurrentUser, Public } from '@nestjs/authentication';
+import type { User, UserDocument } from '../users/schema/users-schema.js'
+import type { AuthenticatedUser } from '../users/schema/users-schema.js';
+import { Types } from 'mongoose';
 
 @Controller('profile')
 export class ProfileController {
@@ -28,4 +32,14 @@ export class ProfileController {
             bioData
         );
     }
+
+    @Get('user')
+    async getUserProfile(
+        @CurrentUser() user: AuthenticatedUser,
+    ) {
+        return this.profileService.getUserProfileId(
+            user._id,
+        );
+    }
+
 }

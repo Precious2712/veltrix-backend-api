@@ -1,6 +1,8 @@
 import {
     Body,
     Controller,
+    Get,
+    Param,
     Post
 } from '@nestjs/common';
 import { VtuagentService } from './vtuagent.service.js';
@@ -24,4 +26,23 @@ export class VtuagentController {
     ) {
         return this.vtuAgentService.processTopUp(createVtuAgentDto, user._id);
     };
+
+
+    @Get('history')
+    async getUserTopUps(
+        @CurrentUser() user: User & { _id: Types.ObjectId },
+    ) {
+        return this.vtuAgentService.getUserTopUps(user._id);
+    }
+
+    @Get('history/:id')
+    async getUserTopUpById(
+        @Param('id') id: string,
+        @CurrentUser() user: User & { _id: Types.ObjectId },
+    ) {
+        return this.vtuAgentService.getUserTopUpById(
+            id,
+            user._id,
+        );
+    }
 };

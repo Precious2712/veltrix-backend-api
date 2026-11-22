@@ -1,8 +1,8 @@
 
 import {
     Injectable,
-    BadRequestException,
     ConflictException,
+    NotFoundException,
 } from '@nestjs/common';
 
 import { Model, Types } from 'mongoose';
@@ -68,4 +68,24 @@ export class ProfileService {
             profile: biography,
         };
     }
+
+    async getUserProfileId(id: Types.ObjectId) {
+        const profile = await this.profileModel.findOne({
+            userId: id,
+        });
+
+        if (!profile) {
+            throw new NotFoundException(
+                'User profile not found',
+            );
+        }
+
+        console.log('user-profile', profile);
+
+        return {
+            message: 'Profile retrieved successfully',
+            profile,
+        };
+    }
+
 }
